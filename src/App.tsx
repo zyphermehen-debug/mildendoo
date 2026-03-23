@@ -1,0 +1,654 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  ArrowRight, 
+  CheckCircle2, 
+  Clock, 
+  Hammer, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Instagram, 
+  Facebook, 
+  Menu, 
+  X,
+  ChevronRight,
+  Quote,
+  Calculator,
+  HardHat,
+  Building2,
+  Ruler,
+  Wrench
+} from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+
+// --- Components ---
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: 'Početna', href: '#' },
+    { name: 'Usluge', href: '#usluge' },
+    { name: 'Projekti', href: '#projekti' },
+    { name: 'Mi smo', href: '#o-nama' },
+    { name: 'Kontakt', href: '#kontakt' },
+  ];
+
+  return (
+    <nav className={`fixed w-full z-50 transition-all duration-300 overflow-x-hidden ${scrolled ? 'bg-white shadow-lg py-3' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-navy flex items-center justify-center rounded-sm">
+            <span className="text-gold font-black text-xl">M</span>
+          </div>
+          <span className={`text-2xl font-black tracking-tighter ${scrolled ? 'text-navy' : 'text-white'}`}>MILDEN</span>
+        </div>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.href} 
+              className={`font-semibold text-sm uppercase tracking-widest hover:text-gold transition-colors ${scrolled ? 'text-navy' : 'text-white'}`}
+            >
+              {link.name}
+            </a>
+          ))}
+          <a 
+            href="#kontakt" 
+            className="bg-gold text-navy px-6 py-2 font-bold text-sm uppercase tracking-widest hover:bg-white hover:text-navy transition-all border-2 border-gold"
+          >
+            Zatražite ponudu
+          </a>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X className={scrolled ? 'text-navy' : 'text-white'} /> : <Menu className={scrolled ? 'text-navy' : 'text-white'} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-full left-0 w-full bg-navy p-6 md:hidden flex flex-col gap-4 shadow-2xl"
+          >
+            {navLinks.map((link) => (
+              <a 
+                key={link.name} 
+                href={link.href} 
+                onClick={() => setIsOpen(false)}
+                className="text-white font-bold text-lg uppercase tracking-widest border-b border-white/10 pb-2"
+              >
+                {link.name}
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
+
+const Hero = () => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, 200]);
+
+  return (
+    <section className="relative h-screen flex items-center overflow-hidden bg-navy">
+      {/* Background Image with Parallax */}
+      <motion.div style={{ y }} className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1503387762-592dee58c460?auto=format&fit=crop&q=80&w=2000" 
+          alt="Construction Site" 
+          className="w-full h-full object-cover opacity-40 scale-110"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-transparent"></div>
+      </motion.div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+              },
+            },
+          }}
+          className="max-w-3xl"
+        >
+          <motion.span 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            className="text-gold font-bold tracking-[0.3em] uppercase mb-4 block text-sm sm:text-base"
+          >
+            Viziju pretvaramo u stvarnost
+          </motion.span>
+          <motion.h1 
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            className="text-4xl sm:text-6xl md:text-8xl font-black text-white leading-[0.9] mb-8 uppercase italic text-balance"
+          >
+            Vaša <span className="text-gold">IDEJA</span><br />
+            Naša <span className="text-white">REALIZACIJA</span>
+          </motion.h1>
+          <motion.p 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            className="text-white/70 text-base sm:text-lg md:text-xl mb-10 max-w-xl leading-relaxed"
+          >
+            MILDEN je građevinska firma posvećena pružanju vrhunskih usluga na tržištu. 
+            Specijalizovani smo za širok spektar građevinskih radova, od temelja do krova.
+          </motion.p>
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <a href="#usluge" className="bg-gold text-navy px-10 py-5 font-black text-lg uppercase tracking-widest hover:bg-white transition-all text-center group flex items-center justify-center gap-2">
+              Naše Usluge <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a href="#kontakt" className="border-2 border-white text-white px-10 py-5 font-black text-lg uppercase tracking-widest hover:bg-white hover:text-navy transition-all text-center">
+              Kontakt
+            </a>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Founders Floating Card (Desktop Only) */}
+      <motion.div 
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1, duration: 0.8 }}
+        className="hidden lg:block absolute bottom-12 right-12 bg-white/5 backdrop-blur-md border border-white/10 p-6 max-w-xs"
+      >
+        <div className="flex gap-4 items-center mb-4">
+          <div className="flex -space-x-4">
+            <img src="https://i.pravatar.cc/150?u=luka" alt="Luka" className="w-12 h-12 rounded-full border-2 border-gold" referrerPolicy="no-referrer" />
+            <img src="https://i.pravatar.cc/150?u=darko" alt="Darko" className="w-12 h-12 rounded-full border-2 border-gold" referrerPolicy="no-referrer" />
+          </div>
+          <div>
+            <p className="text-white font-bold text-sm">Luka & Darko</p>
+            <p className="text-gold text-xs font-semibold uppercase tracking-tighter">Osnivači Mildena</p>
+          </div>
+        </div>
+        <p className="text-white/60 text-sm italic">"Svaki krov koji postavimo je pečat naše posvećenosti kvalitetu."</p>
+      </motion.div>
+    </section>
+  );
+};
+
+const TrustBar = () => {
+  return (
+    <div className="bg-gold py-8 overflow-hidden border-y-4 border-navy">
+      <div className="flex whitespace-nowrap animate-marquee">
+        {[...Array(10)].map((_, i) => (
+          <div key={i} className="flex items-center gap-12 mx-6">
+            <span className="text-navy font-black text-2xl md:text-4xl uppercase italic">512+ PROJEKATA ZAVRŠENO</span>
+            <div className="w-3 h-3 bg-navy rotate-45"></div>
+            <span className="text-navy font-black text-2xl md:text-4xl uppercase italic">25+ GODINA ISKUSTVA</span>
+            <div className="w-3 h-3 bg-navy rotate-45"></div>
+            <span className="text-navy font-black text-2xl md:text-4xl uppercase italic">VRHUNSKI MATERIJALI</span>
+            <div className="w-3 h-3 bg-navy rotate-45"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Process = () => {
+  const steps = [
+    { icon: <Phone className="w-8 h-8" />, title: 'Konsultacije', desc: 'Prvi korak ka vašem cilju je detaljan razgovor o vašim potrebama.' },
+    { icon: <Ruler className="w-8 h-8" />, title: 'Projektovanje', desc: 'Naš tim inženjera kreira precizne planove i 3D vizuelizacije.' },
+    { icon: <Hammer className="w-8 h-8" />, title: 'Izvršenje', desc: 'Vrhunski majstori i moderna oprema garantuju besprekornu gradnju.' },
+    { icon: <CheckCircle2 className="w-8 h-8" />, title: 'Održavanje', desc: 'Ostajemo uz vas i nakon projekta, brinući o dugovečnosti radova.' },
+  ];
+
+  return (
+    <section id="usluge" className="py-24 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-16"
+        >
+          <span className="text-gold font-bold tracking-widest uppercase mb-2 block">Naš Put</span>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-navy uppercase italic">Proces Realizacije</h2>
+        </motion.div>
+
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+              },
+            },
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
+          {steps.map((step, idx) => (
+            <motion.div 
+              key={idx}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              whileHover={{ y: -10 }}
+              className="group relative p-8 border-2 border-navy hover:bg-navy transition-all duration-300"
+            >
+              <div className="text-gold mb-6 group-hover:text-white transition-colors">{step.icon}</div>
+              <h3 className="text-2xl font-black text-navy mb-4 uppercase group-hover:text-gold transition-colors">{step.title}</h3>
+              <p className="text-navy/70 group-hover:text-white/70 transition-colors">{step.desc}</p>
+              <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold flex items-center justify-center font-black text-navy text-xl border-2 border-navy">
+                0{idx + 1}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const Projects = () => {
+  const projects = [
+    { title: 'Zubarska Ordinacija', location: 'Stari Grad, Beograd', img: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=800' },
+    { title: 'Stambeni Prostor', location: 'Voždovac, Beograd', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800' },
+    { title: 'Kosmaj House', location: 'Kosmaj, Srbija', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800' },
+    { title: 'Moderni Krovni Sistem', location: 'Vračar, Beograd', img: 'https://images.unsplash.com/photo-1632759145351-1d592919f522?auto=format&fit=crop&q=80&w=800' },
+  ];
+
+  return (
+    <section id="projekti" className="py-24 bg-navy text-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6"
+        >
+          <div>
+            <span className="text-gold font-bold tracking-widest uppercase mb-2 block">Portfolio</span>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase italic">Naši Poslednji Projekti</h2>
+          </div>
+          <button className="flex items-center gap-2 text-gold font-bold uppercase tracking-widest hover:text-white transition-colors">
+            Pogledaj sve projekte <ArrowRight className="w-5 h-5" />
+          </button>
+        </motion.div>
+
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+              },
+            },
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
+          {projects.map((p, i) => (
+            <motion.div 
+              key={i}
+              variants={{
+                hidden: { opacity: 0, scale: 0.9 },
+                visible: { opacity: 1, scale: 1 },
+              }}
+              whileHover={{ scale: 0.98 }}
+              className="group relative h-[300px] sm:h-[400px] overflow-hidden cursor-pointer"
+            >
+              <img 
+                src={p.img} 
+                alt={p.title} 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+              <div className="absolute bottom-0 left-0 p-6 sm:p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                <p className="text-gold font-bold uppercase tracking-tighter text-sm mb-1">{p.location}</p>
+                <h3 className="text-2xl sm:text-3xl font-black uppercase italic mb-4">{p.title}</h3>
+                <div className="h-1 w-0 group-hover:w-full bg-gold transition-all duration-500"></div>
+                <span className="inline-block mt-4 opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase text-xs tracking-widest">View Case Study</span>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const Testimonials = () => {
+  const testimonials = [
+    {
+      name: 'Vladimir Sapundzić',
+      role: 'Arhitekta',
+      text: 'Milden doo je kompanija koja kombinuje iskustvo, inovativnost i preciznost. Njihov pristup projektima je sistematičan i temeljan, dok je komunikacija uvek efikasna.',
+      img: 'https://i.pravatar.cc/150?u=vladimir'
+    },
+    {
+      name: 'Nemanja Jugović',
+      role: 'Direktor Jugović Gradnja',
+      text: 'Kao poslovni partneri, imali smo priliku da sarađujemo na nekoliko značajnih projekata. Njihova sposobnost da odgovore na sve zahteve ih čini idealnim partnerom.',
+      img: 'https://i.pravatar.cc/150?u=nemanja'
+    }
+  ];
+
+  return (
+    <section className="py-24 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-1"
+          >
+            <span className="text-gold font-bold tracking-widest uppercase mb-2 block">Utisci</span>
+            <h2 className="text-4xl sm:text-5xl font-black text-navy uppercase italic mb-8">Šta Kažu Stručnjaci</h2>
+            <p className="text-navy/60 mb-8">Poverenje gradimo na rezultatima i preporukama vodećih ljudi u industriji.</p>
+            <div className="flex gap-4">
+              <div className="w-12 h-12 border-2 border-navy flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-all cursor-pointer">
+                <ArrowRight className="w-6 h-6 rotate-180" />
+              </div>
+              <div className="w-12 h-12 border-2 border-navy flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-all cursor-pointer">
+                <ArrowRight className="w-6 h-6" />
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+            {testimonials.map((t, i) => (
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2, duration: 0.8 }}
+                className="bg-navy p-8 sm:p-10 relative"
+              >
+                <Quote className="absolute top-6 right-6 text-gold/20 w-12 h-12 sm:w-16 h-16" />
+                <div className="flex items-center gap-4 mb-8">
+                  <img src={t.img} alt={t.name} className="w-14 h-14 sm:w-16 h-16 rounded-full border-2 border-gold" referrerPolicy="no-referrer" />
+                  <div>
+                    <h4 className="text-white font-black text-lg sm:text-xl uppercase tracking-tighter">{t.name}</h4>
+                    <p className="text-gold font-bold text-[10px] sm:text-xs uppercase tracking-widest">{t.role}</p>
+                  </div>
+                </div>
+                <p className="text-white/80 italic leading-relaxed text-sm sm:text-base">"{t.text}"</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ContactForm = () => {
+  const [num1] = useState(Math.floor(Math.random() * 10));
+  const [num2] = useState(Math.floor(Math.random() * 10));
+  const [answer, setAnswer] = useState('');
+  const [isCorrect, setIsCorrect] = useState(false);
+
+  const handleMath = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAnswer(e.target.value);
+    if (parseInt(e.target.value) === num1 + num2) {
+      setIsCorrect(true);
+    } else {
+      setIsCorrect(false);
+    }
+  };
+
+  return (
+    <section id="kontakt" className="py-24 bg-navy relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gold/5 skew-x-12 transform translate-x-1/4"></div>
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="text-gold font-bold tracking-widest uppercase mb-2 block">Kontakt</span>
+            <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-white uppercase italic mb-8 leading-none">Zatražite Ponudu</h2>
+            <p className="text-white/60 text-base sm:text-lg mb-12 max-w-md">
+              Spremni ste za sledeći korak? Popunite formu i naš tim će vas kontaktirati u najkraćem roku sa detaljnom procenom.
+            </p>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gold flex items-center justify-center text-navy">
+                  <Phone className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">Telefon</p>
+                  <p className="text-white font-bold text-base sm:text-lg">+381 64 342 81 12</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gold flex items-center justify-center text-navy">
+                  <Mail className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">Email</p>
+                  <p className="text-white font-bold text-base sm:text-lg">office@milden.rs</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gold flex items-center justify-center text-navy">
+                  <MapPin className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">Lokacija</p>
+                  <p className="text-white font-bold text-base sm:text-lg">Beograd, Srbija</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="bg-white p-6 sm:p-8 md:p-12 shadow-2xl"
+          >
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-navy font-bold uppercase text-[10px] tracking-widest mb-2">Ime i Prezime</label>
+                  <input type="text" className="w-full bg-navy/5 border-2 border-navy/10 px-4 py-3 focus:border-gold outline-none transition-all font-semibold" placeholder="Petar Petrović" />
+                </div>
+                <div>
+                  <label className="block text-navy font-bold uppercase text-[10px] tracking-widest mb-2">Email Adresa</label>
+                  <input type="email" className="w-full bg-navy/5 border-2 border-navy/10 px-4 py-3 focus:border-gold outline-none transition-all font-semibold" placeholder="petar@email.com" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-navy font-bold uppercase text-[10px] tracking-widest mb-2">Tip Projekta</label>
+                <select className="w-full bg-navy/5 border-2 border-navy/10 px-4 py-3 focus:border-gold outline-none transition-all font-semibold appearance-none">
+                  <option>Krovni Sistemi</option>
+                  <option>Izgradnja Objekta</option>
+                  <option>Adaptacija</option>
+                  <option>Konsultacije</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-navy font-bold uppercase text-[10px] tracking-widest mb-2">Vaša Poruka</label>
+                <textarea rows={4} className="w-full bg-navy/5 border-2 border-navy/10 px-4 py-3 focus:border-gold outline-none transition-all font-semibold" placeholder="Opišite vaš projekat..."></textarea>
+              </div>
+
+              {/* Anti-spam Bot */}
+              <div className="bg-navy/5 p-4 border-2 border-navy/10 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Calculator className="text-navy w-5 h-5" />
+                  <span className="font-bold text-navy text-sm sm:text-base">Koliko je {num1} + {num2}?</span>
+                </div>
+                <input 
+                  type="text" 
+                  value={answer}
+                  onChange={handleMath}
+                  className="w-16 sm:w-20 bg-white border-2 border-navy/20 px-3 py-1 text-center font-black text-navy outline-none focus:border-gold" 
+                  placeholder="?"
+                />
+              </div>
+
+              <button 
+                disabled={!isCorrect}
+                className={`w-full py-5 font-black text-base sm:text-lg uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 ${isCorrect ? 'bg-gold text-navy hover:bg-navy hover:text-white cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+              >
+                Pošalji Zahtev <ArrowRight className="w-6 h-6" />
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Footer = () => {
+  return (
+    <footer className="bg-navy pt-24 pb-12 border-t border-white/10 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-24">
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-2 mb-8">
+              <div className="w-8 h-8 bg-gold flex items-center justify-center rounded-sm">
+                <span className="text-navy font-black text-lg">M</span>
+              </div>
+              <span className="text-2xl font-black tracking-tighter text-white">MILDEN</span>
+            </div>
+            <p className="text-white/50 mb-8 leading-relaxed">
+              Vodeća građevinska firma u Srbiji, specijalizovana za premium krovne sisteme i stambenu izgradnju.
+            </p>
+            <div className="flex gap-4">
+              <a href="#" className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:bg-gold hover:text-navy hover:border-gold transition-all">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="#" className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:bg-gold hover:text-navy hover:border-gold transition-all">
+                <Facebook className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-8">Usluge</h4>
+            <ul className="space-y-4 text-white/50 font-semibold">
+              <li><a href="#" className="hover:text-gold transition-colors">Krovni Sistemi</a></li>
+              <li><a href="#" className="hover:text-gold transition-colors">Gruba Gradnja</a></li>
+              <li><a href="#" className="hover:text-gold transition-colors">Adaptacije</a></li>
+              <li><a href="#" className="hover:text-gold transition-colors">Projektovanje</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-8">Lokacije</h4>
+            <ul className="space-y-4 text-white/50 font-semibold">
+              <li>Vračar, Beograd</li>
+              <li>Voždovac, Beograd</li>
+              <li>Stari Grad, Beograd</li>
+              <li>Kosmaj, Srbija</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-8">Newsletter</h4>
+            <p className="text-white/50 mb-6 text-sm">Prijavite se za najnovije projekte i vesti.</p>
+            <div className="flex">
+              <input type="email" placeholder="Email adresa" className="flex-1 bg-white/5 border border-white/10 px-4 py-3 text-white outline-none focus:border-gold" />
+              <button className="bg-gold text-navy px-4 py-3 font-bold">
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-white/5 gap-6">
+          <p className="text-white/30 text-xs font-bold uppercase tracking-widest">
+            © {new Date().getFullYear()} MILDEN.RS. Sva prava zadržana.
+          </p>
+          <div className="flex gap-8 text-white/30 text-xs font-bold uppercase tracking-widest">
+            <a href="#" className="hover:text-white transition-colors">Politika Privatnosti</a>
+            <a href="#" className="hover:text-white transition-colors">Uslovi Korišćenja</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default function App() {
+  return (
+    <div className="min-h-screen selection:bg-gold selection:text-navy overflow-x-hidden w-full max-w-full">
+      <Navbar />
+      <main className="w-full overflow-x-hidden">
+        <Hero />
+        <TrustBar />
+        <Process />
+        <Projects />
+        <Testimonials />
+        <ContactForm />
+      </main>
+      <Footer />
+
+      {/* Custom Styles for Marquee */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 30s linear infinite;
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+          scroll-behavior: smooth;
+        }
+      `}</style>
+    </div>
+  );
+}

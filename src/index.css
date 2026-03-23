@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --color-navy: #002147;
+  --color-gold: #FFB400;
+}
+
+@layer base {
+  html, body {
+    @apply overflow-x-hidden w-full max-w-full;
+    position: relative;
+    overscroll-behavior-x: none;
+  }
+  body {
+    @apply font-sans bg-white text-navy antialiased;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
