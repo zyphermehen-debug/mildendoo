@@ -9,9 +9,10 @@
 
 @layer base {
   html, body {
-    @apply overflow-x-hidden w-full max-w-full;
-    position: relative;
+    @apply overflow-x-hidden w-full max-w-full m-0 p-0;
     overscroll-behavior-x: none;
+    position: relative;
+    scroll-behavior: smooth;
   }
   body {
     @apply font-sans bg-white text-navy antialiased;

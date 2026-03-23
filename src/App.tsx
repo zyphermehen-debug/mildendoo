@@ -36,43 +36,58 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Početna', href: '#' },
     { name: 'Usluge', href: '#usluge' },
+    { name: 'O Nama', href: '#o-nama' },
     { name: 'Projekti', href: '#projekti' },
-    { name: 'Mi smo', href: '#o-nama' },
+    { name: 'Blog', href: '#blog' },
     { name: 'Kontakt', href: '#kontakt' },
+    { name: 'Stranice', href: '#' },
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 overflow-x-hidden ${scrolled ? 'bg-white shadow-lg py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 overflow-x-hidden ${scrolled ? 'bg-white shadow-lg py-2' : 'bg-white/95 py-4'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-navy flex items-center justify-center rounded-sm">
             <span className="text-gold font-black text-xl">M</span>
           </div>
-          <span className={`text-2xl font-black tracking-tighter ${scrolled ? 'text-navy' : 'text-white'}`}>MILDEN</span>
+          <span className="text-2xl font-black tracking-tighter text-navy">MILDEN</span>
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href} 
-              className={`font-semibold text-sm uppercase tracking-widest hover:text-gold transition-colors ${scrolled ? 'text-navy' : 'text-white'}`}
+              className="font-bold text-[11px] uppercase tracking-widest text-navy hover:text-gold transition-colors"
             >
               {link.name}
             </a>
           ))}
+        </div>
+
+        <div className="hidden lg:flex items-center gap-6">
+          <div className="flex items-center gap-2 text-navy">
+            <Phone className="w-4 h-4 text-gold" />
+            <span className="font-bold text-xs">+381 64 342 81 12</span>
+          </div>
+          <a 
+            href="#" 
+            className="border-2 border-navy text-navy px-4 py-2 font-black text-[10px] uppercase tracking-widest hover:bg-navy hover:text-white transition-all"
+          >
+            GET PRO
+          </a>
           <a 
             href="#kontakt" 
-            className="bg-gold text-navy px-6 py-2 font-bold text-sm uppercase tracking-widest hover:bg-white hover:text-navy transition-all border-2 border-gold"
+            className="bg-gold text-navy px-6 py-3 font-black text-[11px] uppercase tracking-widest hover:bg-navy hover:text-white transition-all shadow-lg shadow-gold/20"
           >
             Zatražite ponudu
           </a>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X className={scrolled ? 'text-navy' : 'text-white'} /> : <Menu className={scrolled ? 'text-navy' : 'text-white'} />}
+        <button className="lg:hidden" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X className="text-navy" /> : <Menu className="text-navy" />}
         </button>
       </div>
 
@@ -83,18 +98,30 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-navy p-6 md:hidden flex flex-col gap-4 shadow-2xl"
+            className="absolute top-full left-0 w-full bg-white p-6 lg:hidden flex flex-col gap-4 shadow-2xl border-t border-navy/5"
           >
             {navLinks.map((link) => (
               <a 
                 key={link.name} 
                 href={link.href} 
                 onClick={() => setIsOpen(false)}
-                className="text-white font-bold text-lg uppercase tracking-widest border-b border-white/10 pb-2"
+                className="text-navy font-bold text-sm uppercase tracking-widest border-b border-navy/5 pb-2"
               >
                 {link.name}
               </a>
             ))}
+            <div className="pt-4 flex flex-col gap-4">
+              <div className="flex items-center gap-2 text-navy">
+                <Phone className="w-4 h-4 text-gold" />
+                <span className="font-bold text-sm">+381 64 342 81 12</span>
+              </div>
+              <a 
+                href="#kontakt" 
+                className="bg-gold text-navy px-6 py-3 font-black text-xs uppercase tracking-widest text-center"
+              >
+                Zatražite ponudu
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -104,101 +131,102 @@ const Navbar = () => {
 
 const Hero = () => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 200]);
+  const y = useTransform(scrollY, [0, 500], [0, 100]);
 
   return (
-    <section className="relative h-screen flex items-center overflow-hidden bg-navy">
-      {/* Background Image with Parallax */}
-      <motion.div style={{ y }} className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1503387762-592dee58c460?auto=format&fit=crop&q=80&w=2000" 
-          alt="Construction Site" 
-          className="w-full h-full object-cover opacity-40 scale-110"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-transparent"></div>
-      </motion.div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
+    <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-navy">
+      {/* Background Image with Parallax - Enhanced for all screens */}
+      <div className="absolute inset-0 z-0">
         <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.2,
-              },
-            },
-          }}
-          className="max-w-3xl"
+          style={{ y }} 
+          className="absolute inset-0 w-full h-full scale-125"
         >
-          <motion.span 
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            className="text-gold font-bold tracking-[0.3em] uppercase mb-4 block text-sm sm:text-base"
-          >
-            Viziju pretvaramo u stvarnost
-          </motion.span>
-          <motion.h1 
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            className="text-4xl sm:text-6xl md:text-8xl font-black text-white leading-[0.9] mb-8 uppercase italic text-balance"
-          >
-            Vaša <span className="text-gold">IDEJA</span><br />
-            Naša <span className="text-white">REALIZACIJA</span>
-          </motion.h1>
-          <motion.p 
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            className="text-white/70 text-base sm:text-lg md:text-xl mb-10 max-w-xl leading-relaxed"
-          >
-            MILDEN je građevinska firma posvećena pružanju vrhunskih usluga na tržištu. 
-            Specijalizovani smo za širok spektar građevinskih radova, od temelja do krova.
-          </motion.p>
-          <motion.div 
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <a href="#usluge" className="bg-gold text-navy px-10 py-5 font-black text-lg uppercase tracking-widest hover:bg-white transition-all text-center group flex items-center justify-center gap-2">
-              Naše Usluge <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="#kontakt" className="border-2 border-white text-white px-10 py-5 font-black text-lg uppercase tracking-widest hover:bg-white hover:text-navy transition-all text-center">
-              Kontakt
-            </a>
-          </motion.div>
+          <img 
+            src="https://images.unsplash.com/photo-1632759145351-1d592919f522?auto=format&fit=crop&q=80&w=2000" 
+            alt="Construction Site" 
+            className="w-full h-full object-cover opacity-25"
+            referrerPolicy="no-referrer"
+          />
         </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-b from-navy/90 via-navy/60 to-navy"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/40 to-transparent"></div>
       </div>
 
-      {/* Founders Floating Card (Desktop Only) */}
-      <motion.div 
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        className="hidden lg:block absolute bottom-12 right-12 bg-white/5 backdrop-blur-md border border-white/10 p-6 max-w-xs"
-      >
-        <div className="flex gap-4 items-center mb-4">
-          <div className="flex -space-x-4">
-            <img src="https://i.pravatar.cc/150?u=luka" alt="Luka" className="w-12 h-12 rounded-full border-2 border-gold" referrerPolicy="no-referrer" />
-            <img src="https://i.pravatar.cc/150?u=darko" alt="Darko" className="w-12 h-12 rounded-full border-2 border-gold" referrerPolicy="no-referrer" />
-          </div>
-          <div>
-            <p className="text-white font-bold text-sm">Luka & Darko</p>
-            <p className="text-gold text-xs font-semibold uppercase tracking-tighter">Osnivači Mildena</p>
-          </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
+        <div className="flex flex-col items-center text-center lg:text-left lg:items-start max-w-5xl mx-auto lg:mx-0">
+          
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-3 mb-8 justify-center lg:justify-start"
+          >
+            <div className="h-[2px] w-12 bg-gold"></div>
+            <span className="text-gold font-black tracking-[0.4em] uppercase text-[10px] sm:text-xs">
+              Vrhunska Krovna Rešenja
+            </span>
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] mb-10 uppercase tracking-tighter"
+          >
+            VAŠA <span className="text-gold">IDEJA</span><br />
+            NAŠA <span className="text-white">REALIZACIJA</span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-white/80 text-lg sm:text-xl md:text-2xl mb-12 max-w-2xl leading-relaxed font-medium"
+          >
+            MILDEN je lider u industriji krovnih sistema. Pružamo beskompromisni kvalitet, 
+            sigurnost i dugovečnost za vaš dom ili poslovni prostor.
+          </motion.p>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto"
+          >
+            <a 
+              href="#kontakt" 
+              className="bg-gold text-navy px-12 py-6 font-black text-sm sm:text-base uppercase tracking-widest hover:bg-white transition-all shadow-2xl shadow-gold/20 text-center flex items-center justify-center gap-3 group"
+            >
+              Započnite Projekat <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a 
+              href="#projekti" 
+              className="border-2 border-white/20 text-white px-12 py-6 font-black text-sm sm:text-base uppercase tracking-widest hover:bg-white hover:text-navy transition-all text-center"
+            >
+              Naši Radovi
+            </a>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 1 }}
+            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 w-full border-t border-white/10 pt-12"
+          >
+            {[
+              { label: 'Završenih Projekata', val: '512+' },
+              { label: 'Godina Iskustva', val: '25+' },
+              { label: 'Zadovoljnih Klijenata', val: '100%' },
+              { label: 'Garancija (Godina)', val: '10' }
+            ].map((stat, i) => (
+              <div key={i} className="text-center lg:text-left">
+                <p className="text-gold font-black text-3xl sm:text-4xl mb-1">{stat.val}</p>
+                <p className="text-white/40 font-bold uppercase text-[9px] sm:text-[10px] tracking-widest leading-tight">{stat.label}</p>
+              </div>
+            ))}
+          </motion.div>
         </div>
-        <p className="text-white/60 text-sm italic">"Svaki krov koji postavimo je pečat naše posvećenosti kvalitetu."</p>
-      </motion.div>
+      </div>
     </section>
   );
 };
@@ -231,18 +259,35 @@ const Process = () => {
   ];
 
   return (
-    <section id="usluge" className="py-24 bg-white overflow-hidden">
+    <section id="usluge" className="py-32 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16"
-        >
-          <span className="text-gold font-bold tracking-widest uppercase mb-2 block">Naš Put</span>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-navy uppercase italic">Proces Realizacije</h2>
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start mb-20">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-5"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-[2px] w-10 bg-gold"></div>
+              <span className="text-gold font-black tracking-widest uppercase text-xs">Naš Put</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-black text-navy uppercase italic leading-none mb-8">Proces <br /><span className="text-gold">Realizacije</span></h2>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-7"
+          >
+            <p className="text-navy/60 text-lg md:text-xl font-medium leading-relaxed max-w-2xl">
+              Verujemo u transparentnost i preciznost. Svaki projekat prolazi kroz strogo definisane faze 
+              kako bismo osigurali maksimalan kvalitet i vaše potpuno zadovoljstvo.
+            </p>
+          </motion.div>
+        </div>
 
         <motion.div 
           initial="hidden"
@@ -263,16 +308,16 @@ const Process = () => {
             <motion.div 
               key={idx}
               variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0 },
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
               }}
-              whileHover={{ y: -10 }}
-              className="group relative p-8 border-2 border-navy hover:bg-navy transition-all duration-300"
+              whileHover={{ y: -15 }}
+              className="group relative p-10 bg-navy/5 border-2 border-transparent hover:border-navy hover:bg-white transition-all duration-500 shadow-sm hover:shadow-2xl"
             >
-              <div className="text-gold mb-6 group-hover:text-white transition-colors">{step.icon}</div>
-              <h3 className="text-2xl font-black text-navy mb-4 uppercase group-hover:text-gold transition-colors">{step.title}</h3>
-              <p className="text-navy/70 group-hover:text-white/70 transition-colors">{step.desc}</p>
-              <div className="absolute -top-4 -right-4 w-12 h-12 bg-gold flex items-center justify-center font-black text-navy text-xl border-2 border-navy">
+              <div className="text-gold mb-8 transform group-hover:scale-110 transition-transform duration-500">{step.icon}</div>
+              <h3 className="text-2xl font-black text-navy mb-4 uppercase tracking-tighter">{step.title}</h3>
+              <p className="text-navy/60 font-medium leading-relaxed">{step.desc}</p>
+              <div className="absolute top-6 right-6 font-black text-navy/10 text-6xl group-hover:text-gold/20 transition-colors">
                 0{idx + 1}
               </div>
             </motion.div>
@@ -622,9 +667,9 @@ const Footer = () => {
 
 export default function App() {
   return (
-    <div className="min-h-screen selection:bg-gold selection:text-navy overflow-x-hidden w-full max-w-full">
+    <div className="min-h-screen selection:bg-gold selection:text-navy overflow-x-hidden w-full max-w-full relative">
       <Navbar />
-      <main className="w-full overflow-x-hidden">
+      <main className="w-full overflow-x-hidden relative">
         <Hero />
         <TrustBar />
         <Process />
@@ -647,6 +692,11 @@ export default function App() {
         /* Smooth scroll behavior */
         html {
           scroll-behavior: smooth;
+        }
+
+        /* Prevent horizontal scroll on all elements */
+        * {
+          max-width: 100vw;
         }
       `}</style>
     </div>
